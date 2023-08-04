@@ -63,7 +63,11 @@ Shader "Unlit/Shader1"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                float t = abs(frac(i.uv0.x * 5) * 2 - 1);
+
+                // little animation in shader
+                float xOffset = cos(i.uv0.y * TAU * 8) * 0.01;
+                
+                float t = cos((i.uv0.x + xOffset + _Time.y * 0.1) * TAU * 5) * 0.5 + 0.5;
                 
                 return t;
 
