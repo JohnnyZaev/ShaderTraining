@@ -16,6 +16,7 @@ Shader "Unlit/Shader1"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #define TAU 6.28318530718
 
             #include "UnityCG.cginc"
 
@@ -62,11 +63,24 @@ Shader "Unlit/Shader1"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // frac = value - floor(value)
-                float t = InverseLerp(_ColorStart, _ColorEnd, i.uv0.x);
-                fixed4 outColor = lerp(_ColorA, _ColorB, t);
+                float t = abs(frac(i.uv0.x * 5) * 2 - 1);
                 
-                return outColor; 
+                return t;
+
+                
+                // TriangleWave
+                // float t = abs(frac(i.uv0.x * 5) * 2 - 1);
+                //
+                // return t;
+
+                
+                // easy gradient shader
+                // // frac = value - floor(value)
+                // float t = saturate(InverseLerp(_ColorStart, _ColorEnd, i.uv0.x));
+                // // t = frac(t); good way to test values < 0 && value > 1
+                // fixed4 outColor = lerp(_ColorA, _ColorB, t);
+                //
+                // return outColor; 
             }
             ENDCG
         }
