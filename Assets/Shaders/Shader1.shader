@@ -9,10 +9,18 @@ Shader "Unlit/Shader1"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Transparent"
+               "Queue"="Transparent"
+        }
 
         Pass
         {
+            // pass tags
+            Cull Off
+            ZWrite Off // now it will stop using depth buffer
+            Blend One One // additive
+            // Blend DstColor Zero // multiply
+            
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -68,8 +76,9 @@ Shader "Unlit/Shader1"
                 float xOffset = cos(i.uv0.y * TAU * 8) * 0.01;
                 
                 float t = cos((i.uv0.x + xOffset + _Time.y * 0.1) * TAU * 5) * 0.5 + 0.5;
+                t *= 1 - i.uv0.y;
                 
-                return t;
+                return t * (abs(i.normal.y) < 0.999);
 
                 
                 // TriangleWave
